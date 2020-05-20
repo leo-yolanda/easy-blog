@@ -1,0 +1,19 @@
+{
+  "name": "easy-blog",
+  "version": "1.0.0",
+  "description": "个人简单博客",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leo-yolanda/easy-blog.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leo-yolanda/easy-blog/issues"
+  },
+  "homepage": "https://github.com/leo-yolanda/easy-blog#readme"
+}
