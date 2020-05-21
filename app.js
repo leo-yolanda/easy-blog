@@ -12,7 +12,7 @@ const app = new Koa;
 
 //挂载
 app
-    .use(logger()) //注册日志模块 打印日志 主要是服务器请求与响应所耗费的时间和内存
+    .use(logger()) //注册日志模块 打印日志 主要是服务器请求与响应所耗费的时间和内存 必须放在前面
     .use(static(join(__dirname, "public"))) //配置静态资源目录
     .use(views(join(__dirname, "views"), { //配置视图模板
         extension: "pug"
