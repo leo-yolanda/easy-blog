@@ -5,14 +5,15 @@ const enctry = require('../util/crypto.js');
 
 const User = mongoose.model('users', UserSchema);
 
+//处理用户注册
 exports.reg = async ctx => {
     // console.log('这是注册中间件');
     //用户注册时通过post请求发送数据
     const user = ctx.request.body;
     const username = user.username;
     const password = user.password;
-    console.log(username);
-    console.log(password);
+    // console.log(username);
+    // console.log(password);
 
     //这里是异步的
     //查询并判断用户注册的用户名是否存在
@@ -61,4 +62,42 @@ exports.reg = async ctx => {
             })
         })
 
+}
+
+//处理用户登录
+exports.login = async ctx => {
+    //获取post数据
+    const user = ctx.request.body;
+    const username = user.username;
+    const password = user.password;
+
+    await new Promise((reslove, reject) => {
+            User.find({ username }, (err, data) => {
+                if (err) return reject(err);
+                if (data.length === 0) return reject('用户名不存在')
+                    // console.log(data);
+                    // console.log(data[0].password === enctry(password));
+                    //判断密码是否相同 将输入的密码加密并于数据库中已经加密的密码比较
+                if (data[0].password === enctry(password)) {
+                    return reslove(data); //成功
+                }
+                reslove(''); //失败
+            })
+        })
+        .then(async data => {
+            if (!data) {
+                return ctx.render('isOk', {
+                    status: '密码错误 请重新登录'
+                })
+            }
+            await ctx.render('isOk', {
+                status: '登陆成功'
+            })
+        })
+        .catch(async err => {
+            await ctx.render('isOk', {
+                status: '登陆失败'
+            })
+
+        })
 }

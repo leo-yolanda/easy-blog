@@ -1,11 +1,12 @@
 const Router = require('koa-router');
 //拿到操作user集合的操作对象
-const user = require('../controller/user');
+const { reg, login } = require('../controller/user');
 
 const router = new Router;
 
 
 //主页
+//保持用户的登陆状态
 router.get('/', async ctx => {
     await ctx.render("index", {
         title: '个人博客',
@@ -25,14 +26,10 @@ router.get(/^\/user\/(?=reg|login)/, async ctx => {
 })
 
 //处理用户的登陆请求 post
-router.post('/user/login', async ctx => {
-    const data = ctx.request.body
-    console.log(data);
-
-})
+router.post('/user/login', login)
 
 //处理用户的注册请求 post
-router.post('/user/reg', user.reg)
+router.post('/user/reg', reg)
 
 
 
