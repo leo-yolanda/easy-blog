@@ -1,18 +1,21 @@
 const Router = require('koa-router');
 //拿到操作user集合的操作对象
-const { reg, login } = require('../controller/user');
+const {
+    reg,
+    login,
+    keepLog,
+    logout
+} = require('../controller/user');
 
 const router = new Router;
 
 
 //主页
-//保持用户的登陆状态
-router.get('/', async ctx => {
+//user.keepLon 保持用户的登陆状态
+router.get('/', keepLog, async ctx => {
     await ctx.render("index", {
         title: '个人博客',
-        session: {
-            role: 0
-        }
+        session: ctx.session
     })
 })
 
@@ -26,11 +29,12 @@ router.get(/^\/user\/(?=reg|login)/, async ctx => {
 })
 
 //处理用户的登陆请求 post
-router.post('/user/login', login)
+router.post('/user/login', login);
 
 //处理用户的注册请求 post
-router.post('/user/reg', reg)
+router.post('/user/reg', reg);
 
-
+//用户退出
+router.get('/user/logout', logout);
 
 module.exports = router;

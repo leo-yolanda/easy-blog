@@ -1,9 +1,6 @@
-const mongoose = require('mongoose');
-const { db } = require('../Schema/config');
-const UserSchema = require('../Schema/user');
 const enctry = require('../util/crypto.js');
 
-const User = mongoose.model('users', UserSchema);
+const User = require('../models/user');
 
 //处理用户注册
 exports.reg = async ctx => {
@@ -90,6 +87,35 @@ exports.login = async ctx => {
                     status: '密码错误 请重新登录'
                 })
             }
+
+            // console.log(data);
+            //检测用户的登陆状态
+            //在页面渲染之前设置保存用户cookie的数据
+            ctx.cookies.set('username', username, {
+                domain: 'localhost', //cookie信息在哪个页面生效
+                path: '/',
+                maxAge: 36e5, //当前cookie的过期时间
+                httpOnly: true, //禁止客户端访问次cookie
+                overwrite: false
+            })
+
+            //用户在数据库的_id
+            ctx.cookies.set('uid', data[0]._id, {
+                domain: 'localhost', //cookie信息在哪个页面生效
+                path: '/',
+                maxAge: 36e5, //当前cookie的过期时间
+                httpOnly: true, //禁止客户端访问次cookie
+                overwrite: false
+            })
+
+            //后台的session 与前端的cookie比较 不同则重新登陆
+            ctx.session = {
+                username,
+                uid: data[0]._id
+            }
+
+            // console.log(ctx.session);
+
             await ctx.render('isOk', {
                 status: '登陆成功'
             })
@@ -100,4 +126,37 @@ exports.login = async ctx => {
             })
 
         })
+}
+
+//确定用户状态 保持用户的状态
+exports.keepLog = async(ctx, next) => {
+    //session 不存在
+    if (ctx.session.isNew) {
+        if (ctx.cookies.get('username')) {
+            //更新session
+            ctx.session = {
+                username: ctx.cookies.get('username'),
+                uid: ctx.cookies.get('uid')
+            }
+        }
+    }
+    // console.log(ctx.session.isNew);
+
+    await next();
+
+    // ctx.body = 'aaa'
+}
+
+//用户退出
+exports.logout = async ctx => {
+    //清除session cookie
+    ctx.session = null;
+    ctx.cookies.set('username', null, {
+        maxAge: 0
+    })
+    ctx.cookies.set('uid', null, {
+            maxAge: 0
+        })
+        //重定向到首页
+    ctx.redirect('/')
 }
