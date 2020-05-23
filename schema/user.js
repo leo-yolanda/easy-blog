@@ -1,4 +1,4 @@
-//生成schema对象
+//生成用户的schema对象
 // const { Schema } = require('./config');
 const mongoose = require('mongoose');
 

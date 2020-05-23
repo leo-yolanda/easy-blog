@@ -7,6 +7,11 @@ const {
     logout
 } = require('../controller/user');
 
+const {
+    addArticle,
+    add
+} = require('../controller/article');
+
 const router = new Router;
 
 
@@ -36,5 +41,11 @@ router.post('/user/reg', reg);
 
 //用户退出
 router.get('/user/logout', logout);
+
+//发表文章的页面  需要用户登录之后才能发表
+router.get('/article', keepLog, addArticle);
+
+//发表文章 提交
+router.post('/article', keepLog, add)
 
 module.exports = router;

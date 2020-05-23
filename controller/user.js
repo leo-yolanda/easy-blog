@@ -128,7 +128,7 @@ exports.login = async ctx => {
         })
 }
 
-//确定用户状态 保持用户的状态
+//确定用户状态 保持用户的状态  这是第一个主程序路由 下面还有路由需要执行 需要用到next
 exports.keepLog = async(ctx, next) => {
     //session 不存在
     if (ctx.session.isNew) {
