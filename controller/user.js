@@ -111,7 +111,8 @@ exports.login = async ctx => {
             //后台的session 与前端的cookie比较 不同则重新登陆
             ctx.session = {
                 username,
-                uid: data[0]._id
+                uid: data[0]._id,
+                avatar: data[0].avatar //用户登陆的默认头像
             }
 
             // console.log(ctx.session);

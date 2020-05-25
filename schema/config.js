@@ -11,7 +11,7 @@ const db = mongoose.connect('mongodb://127.0.0.1:27017/user', {
 
 })
 
-const schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
 // const userSchema = new mongoose.Schema({
 //     username: String,
@@ -37,5 +37,5 @@ const schema = mongoose.Schema;
 
 module.exports = {
     db,
-    schema
+    Schema
 }

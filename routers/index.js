@@ -9,20 +9,16 @@ const {
 
 const {
     addArticle,
-    add
+    add,
+    getList
 } = require('../controller/article');
 
 const router = new Router;
 
 
 //主页
-//user.keepLon 保持用户的登陆状态
-router.get('/', keepLog, async ctx => {
-    await ctx.render("index", {
-        title: '个人博客',
-        session: ctx.session
-    })
-})
+//user.keepLon 保持用户的登陆状态 获取session的id和头像信息 文章所有列表
+router.get('/', keepLog, getList);
 
 //设置动态路由 主要用来出来处理返回用户登录 注册 
 router.get(/^\/user\/(?=reg|login)/, async ctx => {
@@ -31,7 +27,7 @@ router.get(/^\/user\/(?=reg|login)/, async ctx => {
     await ctx.render('register', {
         show
     })
-})
+});
 
 //处理用户的登陆请求 post
 router.post('/user/login', login);
@@ -46,6 +42,10 @@ router.get('/user/logout', logout);
 router.get('/article', keepLog, addArticle);
 
 //发表文章 提交
-router.post('/article', keepLog, add)
+router.post('/article', keepLog, add);
+
+//文章列表分页路由 动态路由  默认第一页
+router.get('/page/:id', getList)
+
 
 module.exports = router;
