@@ -1,7 +1,5 @@
-const {
-    Article,
-    User
-} = require('../models/article');
+const { Article } = require('../models/article');
+const { Comment } = require('../models/comments')
 
 //获取用户的schema 拿到操作users集合的实例对象
 
@@ -81,10 +79,8 @@ exports.getList = async ctx => {
             path: 'author', //指向对应的集合
             select: 'username _id avatar' //获取username _id avatar
         }) // mongoose 用于连表查询
-        .then()
-        .catch(err => {
-            console.log(err);
-        })
+        .then(data => data)
+        .catch(err => err)
 
     // console.log(artList);
 
@@ -93,5 +89,38 @@ exports.getList = async ctx => {
         title: '个人博客',
         artList,
         maxNum
+    })
+}
+
+//文章详情页
+exports.details = async ctx => {
+    //获取动态路由的id
+    const _id = ctx.params.id;
+    //查找所点击的文章的详细信息
+    const article = await Article
+        .findById(_id)
+        //连表查询
+        .populate('authors', 'username')
+        .then(data => data)
+        .catch(err => err)
+
+    // console.log(ctx.session);
+
+    //查找跟当前文章相关联的所有评论
+    const comments = await Comment
+        .find({ article: _id }) //通过文章的id值查找
+        .sort('-created') //根据评论时间倒序
+        .populate('from', 'username avatar')
+        .then(data => data)
+        .catch(err => err)
+
+    console.log(comments);
+
+
+    await ctx.render('article', {
+        title: article.title,
+        article,
+        session: ctx.session,
+        comments
     })
 }

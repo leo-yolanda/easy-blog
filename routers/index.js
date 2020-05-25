@@ -10,8 +10,13 @@ const {
 const {
     addArticle,
     add,
-    getList
+    getList,
+    details
 } = require('../controller/article');
+
+const {
+    addCom
+} = require('../controller/comments')
 
 const router = new Router;
 
@@ -45,7 +50,12 @@ router.get('/article', keepLog, addArticle);
 router.post('/article', keepLog, add);
 
 //文章列表分页路由 动态路由  默认第一页
-router.get('/page/:id', getList)
+router.get('/page/:id', getList);
 
+//文章详情页
+router.get('/article/:id', keepLog, details);
+
+//文章评论的发表
+router.post('/comment', keepLog, addCom)
 
 module.exports = router;

@@ -55,9 +55,9 @@ block contents
             //-     p.time 2018-06-29 13:19:13
             //-   .she-said.
             //-     这是评论的内容
-            each info in comment
+            each info in comments
               li
-                img(src=info.from.avatar)
+                img.avatar(src=info.from.avatar)
                 div
                   p.author= info.from.username
                   p.time= info.created.toLocaleString()

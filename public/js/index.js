@@ -1,12 +1,10 @@
 layui.use(["element", "laypage"], () => {
-    let element = layui.element
-    let laypage = layui.laypage
-    const $ = layui.$
+    let element = layui.element;
+    let laypage = layui.laypage;
+    const $ = layui.$;
 
-    element.tabDelete('demo', 'xxx')
-
-
-
+    element.tabDelete('demo', 'xxx');
+    //分页器
     laypage.render({
         //指向存放分页的容器，值可以是容器ID、DOM对象
         elem: "laypage",
@@ -38,4 +36,5 @@ layui.use(["element", "laypage"], () => {
             })
         }
     })
+
 })
