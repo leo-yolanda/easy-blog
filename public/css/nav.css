@@ -32,6 +32,10 @@ body {
 
 /* 副导航 */
 
+.layui-side {
+    border-radius: 10px;
+}
+
 .blog-panel .layui-container {
     padding: 0;
 }

@@ -1,22 +1,28 @@
 const Router = require('koa-router');
 //拿到操作user集合的操作对象
+//用户
 const {
     reg,
     login,
     keepLog,
     logout
 } = require('../controller/user');
-
+//文章
 const {
     addArticle,
     add,
     getList,
     details
 } = require('../controller/article');
-
+//评论
 const {
     addCom
-} = require('../controller/comments')
+} = require('../controller/comments');
+//后台
+const {
+    index
+} = require('../controller/admin');
+
 
 const router = new Router;
 
@@ -56,6 +62,19 @@ router.get('/page/:id', getList);
 router.get('/article/:id', keepLog, details);
 
 //文章评论的发表
-router.post('/comment', keepLog, addCom)
+router.post('/comment', keepLog, addCom);
+
+//后台管理路由
+//文章 评论 头像
+router.get('/admin/:id', keepLog, index)
+
+
+
+//404
+router.get('*', async ctx => {
+    await ctx.render('404', {
+        title: '不管你怎么找，这里没有你要的东西'
+    })
+})
 
 module.exports = router;

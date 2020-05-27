@@ -1,5 +1,6 @@
 const { Article } = require('../models/article');
-const { Comment } = require('../models/comments')
+const { Comment } = require('../models/comments');
+const User = require('../models/user');
 
 //获取用户的schema 拿到操作users集合的实例对象
 
@@ -26,16 +27,34 @@ exports.add = async ctx => {
     }
     //用户已登录
     const data = ctx.request.body;
-    // console.log(data);
+    // console.log(data); //这里的data是获取发表文章的tips title content
 
     //schema中有title content tips 只有author没有 
     //添加作者  存uid 
     // data.author = ctx.session.username;
     data.author = ctx.session.uid;
 
+    //用户评论文章的数量
+    data.commentNum = 0
+        //用户发表文章的数量
+    data.articleNum = 0
+
     await new Promise((reslove, reject) => {
             new Article(data).save((err, data) => {
                 if (err) return reject(err)
+
+                //更新当前用户文章的数量
+                //这里的data是获取文章的_id tips title content author commentNum articleNum created updatedAt
+                // console.log(data);
+                User.updateOne({
+                        _id: data.author
+                    }, {
+                        $inc: { articleNum: 1 }
+                    }, err => {
+                        if (err) return console.log(err);
+
+                    })
+                    // console.log(data);
                 reslove(data)
             })
         })
@@ -114,7 +133,7 @@ exports.details = async ctx => {
         .then(data => data)
         .catch(err => err)
 
-    console.log(comments);
+    // console.log(comments);
 
 
     await ctx.render('article', {

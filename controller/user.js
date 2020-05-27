@@ -112,7 +112,8 @@ exports.login = async ctx => {
             ctx.session = {
                 username,
                 uid: data[0]._id,
-                avatar: data[0].avatar //用户登陆的默认头像
+                avatar: data[0].avatar, //用户登陆的默认头像
+                role: data[0].role //用于后台用户登陆成功的权限
             }
 
             // console.log(ctx.session);

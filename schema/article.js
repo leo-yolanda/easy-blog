@@ -13,7 +13,9 @@ const ArticleSchema = new mongoose.Schema({
         //关联users集合
         ref: 'users',
     },
-    tips: String
+    tips: String, //标签
+    commentNum: Number, //用于计算文章评论数量的字段
+    articleNum: Number,
 }, {
     versionKey: false,
     timestamps: {

@@ -1,4 +1,6 @@
 const { Comment } = require('../models/comments');
+const { Article } = require('../models/article');
+const { User } = require('../models/user');
 
 exports.addCom = async ctx => {
     //验证用户是否登录
@@ -22,8 +24,32 @@ exports.addCom = async ctx => {
                 status: 1,
                 msg: '评论成功'
             }
+
+            //更新当前评论文章的计数器
+            Article
+            //更新评论数量
+                .updateOne({
+                _id: data.article
+            }, {
+                //$inc原子操作 自增
+                $inc: { commentNum: 1 }
+            }, err => {
+                if (err) return console.log(err);
+                console.log('计数器更新成功');
+
+            })
+
+            console.log(data);
+
+            //更新用户的评论的计数器
+            User.updateOne({
+                _id: data.from
+            }, {
+                $inc: { commentNum: 1 }
+            }, err => {
+                if (err) return console.log(err);
+            })
         })
-        //更新当前评论文章的计数器
         .catch(err => {
             message = {
                 status: 0,

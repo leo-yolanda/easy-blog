@@ -38,3 +38,36 @@ app
     .listen(3000, () => {
         console.log("服务器已启动");
     })
+
+
+//创建管理员用户 如果管理员用户已存在 则返回
+{
+    const User = require('./models/user');
+    const enctry = require('./util/crypto.js');
+
+    //查找管理员用户是否存在
+    User
+        .find({ username: 'admin' })
+        .then(data => {
+            //管理员用户不存在
+            if (data.length === 0) {
+                //创建管理员用户
+                new User({
+                        username: 'admin',
+                        password: enctry('admin'),
+                        role: 666
+                    })
+                    .save()
+                    .then(data => {
+                        console.log(`管理员账户->admin 密码->admin`);
+                    })
+                    .catch(err => {
+                        console.log(`保存失败`);
+                    })
+            } else {
+                console.log(`用户名已存在 管理员账户->admin 密码->admin`);
+
+            }
+        })
+
+}

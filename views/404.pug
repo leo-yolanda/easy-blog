@@ -7,13 +7,42 @@ html
       .text-center{
         text-align: center;
       }
+      #title{
+        width:200px;
+        height:50px;
+        background-color:skyblue;
+        margin:auto;
+        font-size:20px;
+        border-radius:20px;
+        box-shadow:0 0 10px #ccc;
+      }
+      .box{
+        width:600px;
+        height: 600px;
+        margin:auto;
+      }
+      img{
+        width:100%;
+        height:100%;
+      }
+      #time{
+        color:white;
+        margin-right:5px;
+      }
+      span.con{
+        font-size:22px;
+        line-height:50px;
+      }
   body
-    h1.text-center 404
-    h2.text-center sorry! not found!!!
-
-    div.text-center
+    h1.text-center 
+    h2.text-center=title
+    div.text-center#title
       span#time 3
-      |秒后将返回首页
+      span.con 秒后将返回首页
+    div.box
+      img(src="/img/404.jpg", alt="")
+
+    
     
     script.
       let n = 3
