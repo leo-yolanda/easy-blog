@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
     //文件名
     filename(req, file, callback) {
         const filename = file.originalname.split('.');
-        callback(null, `${Date.now()}.${filename[1]}`)
+        callback(null, `${Date.now()}.${filename[1]}`);
     }
 })
 
