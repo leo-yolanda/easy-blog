@@ -162,3 +162,34 @@ exports.logout = async ctx => {
         //重定向到首页
     ctx.redirect('/')
 }
+
+//后台部分
+//用户头像上传
+exports.uploadavatar = async ctx => {
+    //获取头像地址
+    const filename = ctx.req.file.filename;
+
+    let datas = {};
+    //当前用户的id与session中的id一致 取session中的id
+    const data = await User
+        .updateOne({
+            _id: ctx.session.uid
+        }, {
+            $set: { avatar: "/avatar/" + filename } //原字操作 有就更新 没有就新增
+        }, (err, res) => {
+            if (err) {
+                datas = {
+                    status: 0,
+                    message: err
+                }
+            } else {
+                datas = {
+                    status: 1,
+                    message: '头像上传成功'
+                }
+            }
+        })
+    console.log(data);
+    // ctx.type = json
+    ctx.body = datas;
+}

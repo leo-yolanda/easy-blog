@@ -102,6 +102,8 @@ exports.getList = async ctx => {
         .catch(err => err)
 
     // console.log(artList);
+    // console.log(ctx.session);
+
 
     await ctx.render('index', {
         session: ctx.session,

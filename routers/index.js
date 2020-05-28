@@ -5,7 +5,8 @@ const {
     reg,
     login,
     keepLog,
-    logout
+    logout,
+    uploadavatar //头像上传
 } = require('../controller/user');
 //文章
 const {
@@ -22,6 +23,9 @@ const {
 const {
     index
 } = require('../controller/admin');
+
+//头像上传工具
+const upload = require('../util/upload');
 
 
 const router = new Router;
@@ -65,10 +69,11 @@ router.get('/article/:id', keepLog, details);
 router.post('/comment', keepLog, addCom);
 
 //后台管理路由
-//文章 评论 头像
-router.get('/admin/:id', keepLog, index)
+//文章 评论 头像上传
+router.get('/admin/:id', keepLog, index);
 
-
+//头像上传功能
+router.post('/upload', keepLog, upload.single('file'), uploadavatar);
 
 //404
 router.get('*', async ctx => {

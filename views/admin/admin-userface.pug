@@ -15,12 +15,12 @@ block main
       const upload = layui.upload
       const layer = layui.layer
 
-      //设定文件大小限制
+      //设定文件大小限制  post请求
       upload.render({
         elem: '#upload'
         ,url: '/upload'
         ,size: 60 //限制文件大小，单位 KB
-        ,done(res){
+        ,done(res){ //回调
           layer.alert(res.message)
         }
       });
