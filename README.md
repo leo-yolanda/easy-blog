@@ -49,59 +49,58 @@
 
 **文件目录结构**
 
-> │  .gitignore         设置使用git上传文件时忽略某些文件
-
-│      
-│  app.js                项目的入口运行文件
-│       
-│  package-lock.json     (上传时需忽略)
-│      
-│  package.json         描述项目依赖
-│       
-│  README.md            阅读文档 说明
-│      
+├─.gitignore         设置使用git上传文件时忽略某些文件
+│
+├─app.js                项目的入口运行文件
+│
+├─package-lock.json     (上传时需忽略)
+│
+├─package.json         描述项目依赖
+│
+├─README.md            阅读文档 说明
+│
 ├─controller        控制器 用于处理路由操作的各种方法
 │      admin.js
 │      article.js   处理用户发表文章的方法
 │      comments.js
 │      user.js      处理用户注册登陆的方法
-│      
+│
 ├─databases         数据库(上传时需忽略)
 │  └─db
-│      
+│
 ├─models             处理数据的模型
 │      admin.js      用于处理管理员的模型
 │      article.js    用于处理文章的模型
 │      comments.js   用于处理文章评论的模型
 │      user.js       用于用户的模型
-│      
+│
 ├─node_modules       包/模块 所有用到的包 模块 依赖(上传时忽略)
 │
 ├─public            静态资源目录
 │  ├─avatar         用户头像
-│  │      
+│  │
 │  ├─css            css样式
-│  │      
+│  │
 │  ├─img            图片
-│  │      
+│  │
 │  ├─js
-│  │      
+│  │
 │  └─layui          ui库
-│                  
+│
 ├─routers           路由
 │      index.js
-│      
+│
 ├─schema            模式  用于创建数据对象的模式
 │      admin.js     管理员
 │      article.js   文章
 │      comments.js  文章评论
 │      config.js    数据库的配置
 │      user.js      处理用户的模式
-│      
+│
 ├─util              工具
 │      crypto.js    加密工具 用于账户密码的加密
 │      upload.js    文件上传工具
-│      
+│
 └─views             视图
 
 ## 开发阶段
