@@ -2,9 +2,6 @@ const { Article } = require('../models/article');
 const { Comment } = require('../models/comments');
 const User = require('../models/user');
 
-//获取用户的schema 拿到操作users集合的实例对象
-
-
 //渲染文章发表页面
 exports.addArticle = async ctx => {
     await ctx.render('add-article', {
@@ -103,7 +100,6 @@ exports.getList = async ctx => {
 
     // console.log(artList);
     // console.log(ctx.session);
-
 
     await ctx.render('index', {
         session: ctx.session,

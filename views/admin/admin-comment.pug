@@ -9,7 +9,7 @@ block main
         th(lay-data="{field:'created', align:'center', templet: res => (new Date(res.created)).toLocaleString()}") 评论时间
         th(lay-data="{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}") 操作
   script(type="text/html")#barDemo
-    a(lay-event="del").layui-btn.layui-btn-danger.layui-btn-xs 删除
+    a(lay-event="delete").layui-btn.layui-btn-danger.layui-btn-xs 删除
 
 
   script.
@@ -17,23 +17,24 @@ block main
       const table = layui.table
       const layer = layui.layer
       const $ = layui.$
-      
+      //监听事件 删除按钮 固定写法
       table.on("tool(demo)", (obj) => {
         const data = obj.data
         // 评论id
         const commentId = data._id
         // 文章id
         const articleId = data.article._id
+        console.log('评论id ' + commentId)
+        console.log('文章id ' + articleId)
 
-
-        if(obj.event !== "del") return
+        //删除判断 是否删除 确定 取消
+        if(obj.event !== "delete") return
 
         layer.confirm("确认删除？", () => {
           $.ajax({
-            method: "delete",
             url: "/comment/" + commentId,
+            method: "delete",
             data: {
-              // 发送文章id值，减少后台查询
               articleId
             },
             success(res){
@@ -42,8 +43,10 @@ block main
                   anim: 1,
                   time: 800
                 }, () => location.reload())
+                console.log(res)
               }else{
-                console.error(res.message)
+                console.error(msg.error)
+                console.log('请求失败')
               }
             }
           })

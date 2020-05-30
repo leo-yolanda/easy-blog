@@ -16,7 +16,7 @@ const commentSchema = new mongoose.Schema({
     //关联article集合
     article: {
         type: ObjectId,
-        ref: 'articles'
+        ref: 'article'
     }
 }, {
     versionKey: false,

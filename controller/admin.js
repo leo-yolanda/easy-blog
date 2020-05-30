@@ -1,5 +1,4 @@
 //后台管理页面
-const { Admin } = require('../models/admin');
 
 const fs = require('fs');
 const { join } = require('path');

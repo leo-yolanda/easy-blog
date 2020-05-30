@@ -135,10 +135,15 @@ exports.keepLog = async(ctx, next) => {
     //session 不存在
     if (ctx.session.isNew) {
         if (ctx.cookies.get('username')) {
-            //更新session
+            let uid = ctx.cookies.get('uid');
+            await User
+                .findById(uid)
+                .then(data => data.avatar)
+                //更新session
             ctx.session = {
                 username: ctx.cookies.get('username'),
-                uid: ctx.cookies.get('uid')
+                uid,
+                avatar
             }
         }
     }

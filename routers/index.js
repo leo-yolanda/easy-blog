@@ -17,7 +17,9 @@ const {
 } = require('../controller/article');
 //评论
 const {
-    addCom
+    addCom,
+    comlist, //后台获取用户的所有评论
+    delcom, //后台删除用户评论
 } = require('../controller/comments');
 //后台
 const {
@@ -74,6 +76,12 @@ router.get('/admin/:id', keepLog, index);
 
 //头像上传功能
 router.post('/upload', keepLog, upload.single('file'), uploadavatar);
+
+//后台获取用户的所有评论
+router.get('/user/comments', keepLog, comlist);
+
+//后台删除用户评论
+router.delete('/comment/:id', keepLog, delcom);
 
 //404
 router.get('*', async ctx => {

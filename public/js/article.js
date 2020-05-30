@@ -22,7 +22,9 @@ layui.use(['layedit', 'layer', 'element'], function() {
                 content,
                 article: $(".art-title").data("artid")
             }
-            //提交评论
+            // console.log(data);
+
+        //提交评论
         $.post("/comment", data, (data) => {
             layer.msg(data.msg, {
                 time: 1000,
