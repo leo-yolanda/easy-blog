@@ -74,7 +74,7 @@
 │      comments.js   用于处理文章评论的模型
 │      user.js       用于用户的模型
 │
-├─node_modules       包/模块 所有用到的包 模块 依赖(上传时忽略)
+├─node_modules       包/模块 所有用到的包 模块 依赖(上传时略)
 │
 ├─public            静态资源目录
 │  ├─avatar         用户头像
