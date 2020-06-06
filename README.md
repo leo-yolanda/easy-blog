@@ -106,21 +106,19 @@
 
 **启动 `mongo` 服务**
 
-1.打开命令行窗口或 `ctrl + r` 输入cmd回车 输入如下命令
+1. 打开命令行窗口或 `ctrl + r` 输入cmd回车 输入如下命令
 
-```shell
+``` shell
     mongod --dbpath "...\easy-blog\databases\db" 
     //前面的...是所在盘符的地址 
     //加上双引号 ` "" ` 是为了防止路径中包含中文导致出错
 ```
 
-2.打开命令行窗口或 `ctrl + r` 输入cmd回车 输入如下命令
+2. 打开命令行窗口或 `ctrl + r` 输入cmd回车 输入如下命令
 
-```shell
+``` shell
     mongo //启动mongo服务
 ```
-
-
 
 ## 3. 开发阶段
 
@@ -397,21 +395,16 @@ Article
 
 还有一种方法就是使用length计算并返回评论数量 不过这种方法不推荐 每次都需要查询并计算数据库中的评论集合中的数量 
 
-###### 7. 设置默认管理员
-
-> 1. 在 `router` -> `index.js` 注册管理员的路由(需保持登陆状态)
-
-> 2. 在 `app.js` 设置并初始化管理员信息
-
-> 3. 在 `controller` 文件夹中新建 `admin.js` 文件用户操作管理员的方法
-
 ###### 8. 404路由
 
 ## 后台部分
 
-> 普通用户与超级管理员的后台的权限
+普通用户与超级管理员的后台的权限
+
 > 1. 普通用户只有户管管理 文章管理 评论管理
 > 2. 管理员则有用户管管理 文章管理 评论管理 头像上传
+
+##### 普通用户/超级管理员
 
 ###### 头像上传 
 
@@ -420,4 +413,81 @@ Article
 3. 利用文件地址 `__dirname` 保存上传的图片
 4. 更新当前用户的头像信息
 
-###### 头像上传
+**说明**
+
+> 在schema中内置了一种钩子函数
+> 其作用是通过设置某个集合 随这个集合进行增删改查等功能
+> 例如 设置comment 的 remove 钩子 用于处理删除用户的评论
+> 当有删除行为就会触发这个钩子函数 每一个回调函数都是中间件
+> pre 前置钩子  监听事件发生之前  先执行 可以绑定多个事件
+
+``` js
+    commentSchema.pre("remove", function(next){
+        //this指向当前集合 这里不能使用箭头函数 因为箭头函数没有this
+        this
+        next(); //不调用next后面的中间件就不会执行
+    }
+```
+
+> post 后置钩子 处在删除事件之前  后执行(就算前面没有pre前置钩子也会后执行)
+> 没有中间件 用于接收前置钩子处理的各种操作
+> //document  要保存 操作的数据
+
+``` js
+    commentSchema.post("save", (document));
+```
+
+下面是处理对应文章评论数-1 当前被删除评论的作者的 commentNum -1
+```js
+    commentSchema.post('remove', (doc) => {
+    //当前的save一定会在remove事件之前触发
+    // console.log("⬇");
+    // console.log(doc);
+
+    const Article = require('../models/article');
+    const User = require('../models/user');
+
+    const { from, article } = doc;
+
+    //对应文章评论数-1
+    Article
+        .updateOne({
+            _id: article
+        }, {
+            $inc: {
+                commentNum: -1
+            }
+        })
+        .exec()
+    //当前被删除评论的作者的 commentNum -1
+    User
+        .updateOne({
+            _id: from
+        }, {
+            $inc: {
+                commentNum: -1
+            }
+        })
+        .exec()
+})
+```
+
+###### 文章管理
+
+1. 注册显示文章列表的路由
+
+2. 注册删除文章列表的路由
+
+###### 评论管理
+
+1. 注册显示评论列表的路由
+
+2. 注册删除评论列表的路由
+
+##### 超级管理员
+
+###### 用户管理
+
+1. 注册显示用户列表的路由
+
+2. 注册删除用户列表的路由
