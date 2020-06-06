@@ -22,7 +22,7 @@ layui.use(['layedit', 'layer', 'element'], function() {
                 content,
                 article: $(".art-title").data("artid")
             }
-            // console.log(data);
+            // console.log(data); 
 
         //提交评论
         $.post("/comment", data, (data) => {
@@ -38,3 +38,4 @@ layui.use(['layedit', 'layer', 'element'], function() {
         })
     })
 });
+

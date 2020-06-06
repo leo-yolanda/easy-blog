@@ -5,6 +5,4 @@ const Comment = mongoose.model('comments', CommentSchema);
 
 
 
-module.exports = {
-    Comment
-};
+module.exports = Comment;

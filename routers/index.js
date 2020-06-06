@@ -2,28 +2,33 @@ const Router = require('koa-router');
 //拿到操作user集合的操作对象
 //用户
 const {
-    reg,
-    login,
-    keepLog,
-    logout,
-    uploadavatar //头像上传
+    reg, //注册
+    login, //登录
+    reglog, //登陆/注册
+    keepLog, //保持登录状态
+    logout, //退出
+    uploadavatar, //后台头像上传
+    users, //后台超级管理员用户管理
+    deluser //后台管理员删除用户
 } = require('../controller/user');
 //文章
 const {
-    addArticle,
-    add,
-    getList,
-    details
+    addArticle, //发表文章页面
+    add, //发表提交文章
+    getList, //文章首页和分页
+    details, //文章详情页
+    artList, //文章发表
+    delart  //后台删除普通用户文章
 } = require('../controller/article');
 //评论
 const {
-    addCom,
+    addCom, //发表评论
     comlist, //后台获取用户的所有评论
     delcom, //后台删除用户评论
 } = require('../controller/comments');
 //后台
 const {
-    index
+    index //首页
 } = require('../controller/admin');
 
 //头像上传工具
@@ -38,13 +43,7 @@ const router = new Router;
 router.get('/', keepLog, getList);
 
 //设置动态路由 主要用来出来处理返回用户登录 注册 
-router.get(/^\/user\/(?=reg|login)/, async ctx => {
-    //show 为true时显示注册 false显示登陆  
-    const show = /reg$/.test(ctx.path);
-    await ctx.render('register', {
-        show
-    })
-});
+router.get(/^\/user\/(?=reg|login)/, reglog);
 
 //处理用户的登陆请求 post
 router.post('/user/login', login);
@@ -77,11 +76,23 @@ router.get('/admin/:id', keepLog, index);
 //头像上传功能
 router.post('/upload', keepLog, upload.single('file'), uploadavatar);
 
-//后台获取用户的所有评论
+//后台获取普通用户的所有评论
 router.get('/user/comments', keepLog, comlist);
 
-//后台删除用户评论
+//后台删除普通用户评论
 router.delete('/comment/:id', keepLog, delcom);
+
+//后台获取普通用户所有文章
+router.get('/user/articles',keepLog,artList)
+
+//后台删除普通用户的文章
+router.delete('/article/:id', keepLog, delart);
+
+//后台超级管理员对用户的管理
+router.get('/user/users',keepLog,users);
+
+//后台管理员删除用户
+router.delete('/user/:id',keepLog,deluser);
 
 //404
 router.get('*', async ctx => {

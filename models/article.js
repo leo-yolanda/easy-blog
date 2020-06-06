@@ -5,6 +5,4 @@ const Article = mongoose.model('article', ArticleSchema);
 
 
 
-module.exports = {
-    Article
-};
+module.exports = Article;

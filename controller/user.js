@@ -2,6 +2,15 @@ const enctry = require('../util/crypto.js');
 
 const User = require('../models/user');
 
+//用户登陆/注册
+exports.reglog = async ctx => {
+    //show 为true时显示注册 false显示登陆  
+    const show = /reg$/.test(ctx.path);
+    await ctx.render('register', {
+        show
+    })
+}
+
 //处理用户注册
 exports.reg = async ctx => {
     // console.log('这是注册中间件');
@@ -15,30 +24,30 @@ exports.reg = async ctx => {
     //这里是异步的
     //查询并判断用户注册的用户名是否存在
     await new Promise((reslove, reject) => {
-            //查询user数据库
-            User.find({ username }, (err, data) => {
-                if (err) return reject(err);
-                //判断用户名在数据库是否存在
-                if (data.length !== 0) {
-                    //用户名已存在
-                    return reslove("")
+        //查询user数据库
+        User.find({ username }, (err, data) => {
+            if (err) return reject(err);
+            //判断用户名在数据库是否存在
+            if (data.length !== 0) {
+                //用户名已存在
+                return reslove("")
+            }
+            //用户名不存在 则保存到数据库 enctry 密码进行加密
+            const _user = new User({
+                username,
+                password: enctry(password)
+            })
+            _user.save((err, data) => {
+                if (err) {
+                    //保存失败
+                    reject(err);
+                } else {
+                    //保存成功
+                    reslove(data)
                 }
-                //用户名不存在 则保存到数据库 enctry 密码进行加密
-                const _user = new User({
-                    username,
-                    password: enctry(password)
-                })
-                _user.save((err, data) => {
-                    if (err) {
-                        //保存失败
-                        reject(err);
-                    } else {
-                        //保存成功
-                        reslove(data)
-                    }
-                })
             })
         })
+    })
         //成功的状态 用户名存在 用户名保存成功  reslove
         .then(async data => {
             if (data) {
@@ -69,18 +78,18 @@ exports.login = async ctx => {
     const password = user.password;
 
     await new Promise((reslove, reject) => {
-            User.find({ username }, (err, data) => {
-                if (err) return reject(err);
-                if (data.length === 0) return reject('用户名不存在')
-                    // console.log(data);
-                    // console.log(data[0].password === enctry(password));
-                    //判断密码是否相同 将输入的密码加密并于数据库中已经加密的密码比较
-                if (data[0].password === enctry(password)) {
-                    return reslove(data); //成功
-                }
-                reslove(''); //失败
-            })
+        User.find({ username }, (err, data) => {
+            if (err) return reject(err);
+            if (data.length === 0) return reject('用户名不存在')
+            // console.log(data);
+            // console.log(data[0].password === enctry(password));
+            //判断密码是否相同 将输入的密码加密并于数据库中已经加密的密码比较
+            if (data[0].password === enctry(password)) {
+                return reslove(data); //成功
+            }
+            reslove(''); //失败
         })
+    })
         .then(async data => {
             if (!data) {
                 return ctx.render('isOk', {
@@ -131,7 +140,7 @@ exports.login = async ctx => {
 }
 
 //确定用户状态 保持用户的状态  这是第一个主程序路由 下面还有路由需要执行 需要用到next
-exports.keepLog = async(ctx, next) => {
+exports.keepLog = async (ctx, next) => {
     //session 不存在
     if (ctx.session.isNew) {
         if (ctx.cookies.get('username')) {
@@ -139,7 +148,7 @@ exports.keepLog = async(ctx, next) => {
             await User
                 .findById(uid)
                 .then(data => data.avatar)
-                //更新session
+            //更新session
             ctx.session = {
                 username: ctx.cookies.get('username'),
                 uid,
@@ -162,9 +171,9 @@ exports.logout = async ctx => {
         maxAge: 0
     })
     ctx.cookies.set('uid', null, {
-            maxAge: 0
-        })
-        //重定向到首页
+        maxAge: 0
+    })
+    //重定向到首页
     ctx.redirect('/')
 }
 
@@ -197,4 +206,21 @@ exports.uploadavatar = async ctx => {
     console.log(data);
     // ctx.type = json
     ctx.body = datas;
+}
+
+//超级管理员用户管理
+exports.users = async ctx =>{
+    const data = await User.find()
+    // console.log(data)
+    ctx.body = {
+        code:0,
+        data
+    }
+}
+
+//超级管理员删除用户
+exports.deluser = async ctx => {
+    // console.log("111")
+    const _id = ctx.params.id;
+    console.log(_id)
 }
