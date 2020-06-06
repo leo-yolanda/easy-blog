@@ -220,7 +220,23 @@ exports.users = async ctx =>{
 
 //超级管理员删除用户
 exports.deluser = async ctx => {
-    // console.log("111")
     const _id = ctx.params.id;
     console.log(_id)
+    let res = {
+        state: 1,
+        message: "删除成功"
+    }
+
+    await User
+        .findById(_id)
+        .then(data => {
+            data.remove()
+        })
+        .catch(err => {
+            res => {
+                state: 0;
+                message: err
+            }
+        })
+    ctx.body = res
 }
