@@ -6,7 +6,7 @@ const logger = require('koa-logger');
 const body = require('koa-body');
 const { join } = require('path');
 const session = require('koa-session');
-const cpmpress = require('koa-compress');
+const compress = require('koa-compress');
 
 //生成koa实例
 const app = new Koa;
