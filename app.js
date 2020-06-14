@@ -6,7 +6,7 @@ const logger = require('koa-logger');
 const body = require('koa-body');
 const { join } = require('path');
 const session = require('koa-session');
-// const cpmpress = require('koa-compress');
+const cpmpress = require('koa-compress');
 
 //生成koa实例
 const app = new Koa;
@@ -27,20 +27,20 @@ const CONFIG = {
 
 //挂载
 app
-    // .use(logger()) //注册日志模块 打印日志 主要是服务器请求与响应所耗费的时间和内存 必须放在前面
-    // .use(compress({ //注册资源压缩模块 compress
-    //     filter(content_type) { // 只有在请求的content-type中有gzip类型，我们才会考虑压缩，因为zlib是压缩成gzip类型的
-    //         return /text/i.test(content_type)
-    //     },
-    //     threshold: 2048, // 阀值，当数据超过1kb的时候，可以压缩
-    //     gzip: {
-    //         flush: require('zlib').Z_SYNC_FLUSH  // zlib是node的压缩模块
-    //     },
-    //     deflate: {
-    //         flush: require('zlib').Z_SYNC_FLUSH,
-    //     },
-    //     br: false // 禁用 brotli
-    // }))
+    .use(logger()) //注册日志模块 打印日志 主要是服务器请求与响应所耗费的时间和内存 必须放在前面
+    .use(compress({ //注册资源压缩模块 compress
+        filter(content_type) { // 只有在请求的content-type中有gzip类型，我们才会考虑压缩，因为zlib是压缩成gzip类型的
+            return /text/i.test(content_type)
+        },
+        threshold: 2048, // 阀值，当数据超过1kb的时候，可以压缩
+        gzip: {
+            flush: require('zlib').Z_SYNC_FLUSH  // zlib是node的压缩模块
+        },
+        deflate: {
+            flush: require('zlib').Z_SYNC_FLUSH,
+        },
+        br: false // 禁用 brotli
+    }))
     .use(session(CONFIG, app)) //注册session 挂载app对象  保存对象
     .use(body()) // 配置koa-body 处理post请求数据
     .use(static(join(__dirname, "public"))) //配置静态资源目录
